@@ -1,6 +1,11 @@
 [profile.default]
+solc_version = "0.8.21"
 src = "src"
+build_info = true
 out = "out"
 libs = ["lib"]
+ffi = true
+ast = true
+extra_output = ["storageLayout"]
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
