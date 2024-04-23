@@ -1,66 +1,53 @@
-## Foundry
+# GMX V2 Lens Data Smart Contract
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This smart contract is designed to gather identical information from the GMX V2 stats dashboard, providing lens data for market analytics and tracking. It is developed in a foundry-based environment and is UUPS upgradeable.
 
-Foundry consists of:
+## Overview
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+The smart contract includes a `getMarketData` function that returns a `MarketDataState` struct containing various market data metrics. The metrics include information such as market tokens, pool value, token amounts, USD values, open interest, profit and loss (PNL), borrowing factors, funding factors, reserved USD, and maximum open interest USD for both long and short positions.
 
-## Documentation
-
-https://book.getfoundry.sh/
 
 ## Usage
 
 ### Build
 
 ```shell
+$ git submodule init
+$ git submodule update
+```
+
+
+```shell
 $ forge build
 ```
 
-### Test
+### Sample ENV
 
+```
+PROXY_ADDRESS = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"    // Address of proxy to be updated
+ORACLE_ADDRESS = "0xa11B501c2dd83Acd29F6727570f2502FAaa617F2"   // Oracle address
+DATA_STORE_ADDRESS = "0xFD70de6b91282D8017aA4E741e9Ae325CAb992d8"   // Data store address
+READER_ADDRESS = "0xdA5A70c885187DaA71E7553ca9F728464af8d2ad"   // Reader address
+PRIVATE_KEY = <Private Key> // Private key for broadcasting txs
+RPC_URL=<RPC>
+```
+
+### Test
+The fork tests are based on arbitrum off of block number `203618435`, And are expected to match the values specified in `gmx_v2_markets_2024-04-22.csv` procured from GMX dashboard.
 ```shell
 $ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
 ```
 
 ### Deploy
 
 ```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+$ forge script script/GMXAggregatorDeploy.s.sol --rpc-url <RPC>
 ```
 
-### Cast
+### Upgrade
 
 ```shell
-$ cast <subcommand>
+$ forge script script/GMXAggregatorUpgrade.s.sol --rpc-url <RPC>
 ```
 
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+*Note If you want the txs to be broadcasted too, add --broadcast flag and add --force to recompile
